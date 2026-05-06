@@ -1,0 +1,32 @@
+body {
+  color: #171717;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+main {
+  margin: 48px auto;
+  max-width: 760px;
+  padding: 0 24px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border-top: 1px solid #ddd;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 96px 1fr;
+  padding: 12px 0;
+}
+
+a {
+  color: #0645ad;
+}
+
+p {
+  line-height: 1.6;
+}
