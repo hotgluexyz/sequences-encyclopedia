@@ -7,19 +7,25 @@ export const dynamic = "force-dynamic";
 
 type SearchPage = {
   searchParams: Promise<{ q?: string }>;
-}
+};
 
-export default async function Home({searchParams}: SearchPage) {
+export default async function Home({ searchParams }: SearchPage) {
   let query: string | null = (await searchParams)?.q;
-  const {sequences, hasMore} = (await getSequences(query)) ?? { sequences: [], hasMore: false};
-
-  console.log(`HAS MORE? ${hasMore}`)
+  const { sequences, hasMore } = (await getSequences(query)) ?? {
+    sequences: [],
+    hasMore: false,
+  };
 
   return (
     <main>
       <h1>Sequences Encyclopedia</h1>
       <SearchInput initialValue={query ?? ""} />
-      <SequenceList query={query ?? ""} initialItems={sequences} hasMore={hasMore} />
+      <SequenceList
+        key={query}
+        query={query ?? ""}
+        initialItems={sequences}
+        hasMore={hasMore}
+      />
     </main>
   );
 }
