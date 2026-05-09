@@ -46,6 +46,7 @@ function SequenceList({ query, initialItems, hasMore }: SequenceListParams) {
         ))}
       </ul>
       {hasNextPage && <div ref={sentryRef}>Loading...</div>}
+      {items.length === 0 && <p>No sequences found</p>}
     </>
   );
 }
