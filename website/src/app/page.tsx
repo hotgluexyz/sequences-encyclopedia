@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getSequences } from "@/lib/api";
 import SearchInput from "@/app/components/SearchInput";
 import SequenceList from "@/app/components/SequenceList";
@@ -10,7 +9,7 @@ type SearchPage = {
 };
 
 export default async function Home({ searchParams }: SearchPage) {
-  let query: string | null = (await searchParams)?.q;
+  const query: string | null = (await searchParams)?.q;
   const { sequences, hasMore } = (await getSequences(query)) ?? {
     sequences: [],
     hasMore: false,

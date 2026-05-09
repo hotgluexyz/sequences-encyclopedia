@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useTransition } from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
-import { getSequences, Sequence } from "@/lib/api";
+import { Sequence } from "@/lib/api";
 import Link from "next/link";
+import {fetchSequences} from "@/lib/actions";
 
 type SequenceListParams = {
   query: string;
@@ -17,12 +18,6 @@ function SequenceList({ query, initialItems, hasMore }: SequenceListParams) {
   const [hasNextPage, setHasNextPage] = useState(hasMore);
   const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    setItems(initialItems);
-    setPage(1);
-    setHasNextPage(hasMore);
-  }, [initialItems, hasMore]);
-
   const [sentryRef] = useInfiniteScroll({
     loading: isPending,
     hasNextPage,
@@ -30,7 +25,7 @@ function SequenceList({ query, initialItems, hasMore }: SequenceListParams) {
 
       startTransition(async () => {
         const nextPage = page + 1;
-        const res = await getSequences(query, nextPage);
+        const res = await fetchSequences(query, nextPage);
         if (!res) return;
         setItems((prev) => [...prev, ...res.sequences]);
         setPage(nextPage);

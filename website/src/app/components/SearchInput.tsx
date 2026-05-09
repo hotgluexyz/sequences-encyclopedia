@@ -7,24 +7,20 @@ type initialParams = {
 };
 
 function SearchInput({ initialValue }: initialParams) {
-  let [query, setQuery] = useState<string>(initialValue);
-  let [debouncedQuery, setDebouncedQuery] = useState<string>(initialValue);
-  let router = useRouter();
+  const [query, setQuery] = useState<string>(initialValue);
+  const router = useRouter();
 
   useEffect(() => {
+    if (query === initialValue) return;
     const timer = setTimeout(() => {
-      setDebouncedQuery(query);
+      router.replace(`?q=${encodeURIComponent(query)}`);
     }, 300);
     return () => clearTimeout(timer);
-  }, [query]);
-
-  useEffect(() => {
-    router.replace(`?q=${encodeURIComponent(debouncedQuery)}`);
-  }, [debouncedQuery]);
+  }, [query, initialValue, router]);
 
   return (
     <input
-      className={"search-input"}
+      className="search-input"
       type="text"
       value={query}
       onChange={(e) => setQuery(e.target.value)}
