@@ -1,6 +1,8 @@
 import os
 
-from flask import Flask, jsonify
+from flask import Flask
+from flask import jsonify
+from flask import request
 from flask_cors import CORS
 from psycopg import connect
 from psycopg.rows import dict_row
@@ -42,13 +44,23 @@ def health():
 
 @app.get("/sequences")
 def sequences():
+    q = request.args.get('q')
+
+    accepted_fields = {'name', 'keywords', 'oeis_id'}
+    filter_statement = ""
+    filter_params = []
+    if q:
+        filter_statement = "WHERE " + " OR ".join([f"""{field} ILIKE %s""" for field in accepted_fields])
+        filter_params = [f"%{q}%" for _ in range(len(accepted_fields))]
+
     rows = query(
-        """
+        f"""
         select sequence_number, oeis_id, name, data, keywords, offset_value
         from oeis_sequences
+        {filter_statement}
         order by name
         limit 200
-        """
+        """, filter_params
     )
     return jsonify([shape(row) for row in rows])
 

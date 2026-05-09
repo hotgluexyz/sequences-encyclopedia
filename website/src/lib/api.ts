@@ -16,8 +16,8 @@ async function get<T>(path: string) {
   return (await response.json()) as T;
 }
 
-export function getSequences() {
-  return get<Sequence[]>("/sequences");
+export function getSequences(q: string | null) {
+  return get<Sequence[]>(`/sequences${`?q=${encodeURIComponent(q ?? "")}` ?? ''}`);
 }
 
 export function getSequence(id: string) {
