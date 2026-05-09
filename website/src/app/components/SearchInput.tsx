@@ -9,11 +9,19 @@ type initialParams = {
 
 function SearchInput({initialValue}: initialParams) {
 	let [query, setQuery] = useState<string>(initialValue);
+	let [debouncedQuery, setDebouncedQuery] = useState<string>(initialValue);
 	let router = useRouter();
 
 	useEffect(() => {
-		router.replace(`?q=${encodeURIComponent(query)}`)
+		const timer = setTimeout(() => {
+			setDebouncedQuery(query)
+		}, 300)
+		return () => clearTimeout(timer)
 	}, [query])
+
+	useEffect(() => {
+		router.replace(`?q=${encodeURIComponent(query)}`)
+	}, [debouncedQuery])
 	return (
 		<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
 	);

@@ -8,6 +8,8 @@ export type Sequence = {
   offset: string | null;
 };
 
+export type SequencesResponse = { sequences: Sequence[], hasMore: boolean };
+
 const API_URL = process.env.API_URL ?? "http://localhost:5001";
 
 async function get<T>(path: string) {
@@ -16,8 +18,8 @@ async function get<T>(path: string) {
   return (await response.json()) as T;
 }
 
-export function getSequences(q: string | null) {
-  return get<Sequence[]>(`/sequences${`?q=${encodeURIComponent(q ?? "")}` ?? ''}`);
+export async function getSequences(q: string | null, page: number = 1) {
+  return get<SequencesResponse>(`/sequences${`?q=${encodeURIComponent(q ?? "")}&page=${page}`}`);
 }
 
 export function getSequence(id: string) {
