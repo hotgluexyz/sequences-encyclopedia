@@ -9,11 +9,11 @@ type SearchPage = {
 };
 
 export default async function Home({ searchParams }: SearchPage) {
-  const query: string | null = (await searchParams)?.q;
-  const { sequences, hasMore } = (await getSequences(query)) ?? {
-    sequences: [],
-    hasMore: false,
-  };
+  const query: string | null = (await searchParams)?.q ?? null;
+  const result = await getSequences(query);
+
+  if (!result) throw new Error("Failed to fetch sequences");
+  const { sequences, hasMore } = result;
 
   return (
     <main>

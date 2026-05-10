@@ -46,11 +46,14 @@ def health():
 @app.get("/sequences")
 def sequences():
     q = request.args.get('q')
-    page = int(request.args.get('page', 1))
+    try:
+        page = max(1, int(request.args.get('page', 1)))
+    except (ValueError, TypeError):
+        page = 1
 
     offset = (page - 1) * PAGE_SIZE
 
-    accepted_fields = {'name', 'keywords', 'oeis_id'}
+    accepted_fields = ('name', 'keywords', 'oeis_id')
     filter_statement = ""
     filter_params = []
     if q:

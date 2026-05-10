@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
 import { Sequence } from "@/lib/api";
 import Link from "next/link";
-import {fetchSequences} from "@/lib/actions";
+import { fetchSequences } from "@/lib/actions";
 
 type SequenceListParams = {
   query: string;
@@ -22,11 +22,13 @@ function SequenceList({ query, initialItems, hasMore }: SequenceListParams) {
     loading: isPending,
     hasNextPage,
     onLoadMore: () => {
-
       startTransition(async () => {
         const nextPage = page + 1;
         const res = await fetchSequences(query, nextPage);
-        if (!res) return;
+        if (!res) {
+          setHasNextPage(false);
+          return;
+        }
         setItems((prev) => [...prev, ...res.sequences]);
         setPage(nextPage);
         setHasNextPage(res.hasMore);

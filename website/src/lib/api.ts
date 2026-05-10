@@ -1,3 +1,5 @@
+import "server-only";
+
 export type Sequence = {
   id: string;
   number: number;

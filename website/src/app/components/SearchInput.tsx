@@ -13,7 +13,7 @@ function SearchInput({ initialValue }: initialParams) {
   useEffect(() => {
     if (query === initialValue) return;
     const timer = setTimeout(() => {
-      router.replace(`?q=${encodeURIComponent(query)}`);
+      router.replace(query ? `?q=${encodeURIComponent(query)}` : "/");
     }, 300);
     return () => clearTimeout(timer);
   }, [query, initialValue, router]);
@@ -22,6 +22,7 @@ function SearchInput({ initialValue }: initialParams) {
     <input
       className="search-input"
       type="text"
+      placeholder={"Search sequences..."}
       value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
